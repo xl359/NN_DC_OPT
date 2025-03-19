@@ -13,9 +13,14 @@ To run this code, follow the instruction
 # Repo Method
 4. Type `julia`, hit enter to enter julia environment
 5. Type `]` then type `activate .`, hit enter to active virtual environment
-6. Type `instantiate`, hit enter
-7. Click delete to go back to julia environment
-8. Type `include("dc_opt_dca.jl")` to run the file
+6. Run this command
+   ```
+   activate .
+   add JLD2 PowerModels Ipopt Distributions JuMP Gurobi LinearAlgebra Plots Random
+   instantiate
+     ```
+9. Click delete to go back to julia environment
+10. Type `include("dc_opt_dca.jl")` to run the file
 
 # Repo Method
 4. Type `julia dc_opt_dca.jl`, hit enter
