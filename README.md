@@ -24,6 +24,18 @@ To run this code, follow the instruction
 
 # Repo Method
 4. Type `julia dc_opt_dca.jl`, hit enter
+# Output
+You will obtain the plot named smallcase_convergence.png showing the convergence to groundtruth.
+
+You will also obtain a dictionary dca_charges.jld2 containing the following 
+1. ρ:                             ρ value used,
+2. dca_charges:                   dca charges at each iteration,
+3. ground_truth_charge_final:     sum of the ground truth charge,
+4. dca_charges_final:             sum of the dca charge result,
+5. sos1_cond:                     SOS1 condition violation,
+6. iteration_number:              iteration_number.
+
+
 
 
 # Package Specification
