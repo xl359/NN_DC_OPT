@@ -43,6 +43,7 @@ You will also obtain a dictionary dca_charges.jld2 containing the following
 
 The code runs on the following version of the packages:
 
+Julia v1.8.5
 BSON v0.3.9
 CSV v0.10.15
 CUDA v4.4.2
