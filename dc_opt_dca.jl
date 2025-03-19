@@ -46,6 +46,7 @@ function nn_sos1_ref(d)
             :v  : Result of the ReLU function properity
         =#
     model = Model(() -> Gurobi.Optimizer(GRB_ENV))
+    JuMP.set_silent(model)
 
     @variable(model, y[1:n_hn,1:n_hl]>=0)
     @variable(model, v[1:n_hn,1:n_hl]>=0)
