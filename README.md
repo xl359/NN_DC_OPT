@@ -1,7 +1,7 @@
 # NN_DC_OPT
 Optimization over trained neural networks and application to data center scheduling
 
-This repo produces the results for a small test case of dca solution application on data center allocation.
+This repo produces the results for a small test case on PJM 5-bus system of dca solution application on data center allocation.
 
 Make sure to active project environment using `Project.toml` and `Manifest.toml` located in the folder.
 To run this code, follow the instruction
@@ -43,31 +43,11 @@ You will also obtain a dictionary dca_charges.jld2 containing the following
 
 The code runs on the following version of the packages:
 
-Julia v1.8.5
-BSON v0.3.9
-CSV v0.10.15
-CUDA v4.4.2
-ColorTypes v0.12.0
-Colors v0.13.0
-DataFrames v1.7.0
-Distributions v0.25.117
-Flux v0.13.17
-Gurobi v1.7.0
-IJulia v1.26.0
-Ipopt v1.7.2
-JLD2 v0.5.11
-JuMP v1.24.0
-LaTeXStrings v1.4.0
-MLDatasets v0.7.18
-PlotlyJS v0.18.15
-Plots v1.40.9
-PowerModels v0.21.3
-PrettyTables v2.3.2
-ReverseDiff v1.15.3
-StatsBase v0.34.4
-StatsPlots v0.15.7
-Turing v0.34.1
-Zygote v0.6.75
+| Software   | Version 
+|------------|-----------|
+| Julia      | v1.8.5    |
+| Gurobi     | 12.0      | 
+
 
 
 **Gurobi is used as the optimization software. We use Gurobi with license version 12.0. A different version of Gurobi license will cause issue when running. If you have a different version please request a new academic license. Gurobi offers free academic licence [Gurobi](https://www.gurobi.com)**
