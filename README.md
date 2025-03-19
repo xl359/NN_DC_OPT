@@ -51,5 +51,5 @@ Turing v0.34.1
 Zygote v0.6.75
 
 
-Gurobi is used as the optimization software. Gurobi offers free educational licence [Gurobi](URL)https://www.gurobi.com
-JuMP is a modeling language. See [JuMP](URL)[https://www.gurobi.com](https://github.com/jump-dev/JuMP.jl)
+Gurobi is used as the optimization software. Gurobi offers free educational licence [Gurobi](URL)(https://www.gurobi.com)
+JuMP is a modeling language. See [JuMP](https://github.com/jump-dev/JuMP.jl)
