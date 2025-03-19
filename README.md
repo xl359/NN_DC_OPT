@@ -10,4 +10,8 @@ To run this code, follow the instruction
 3. Download the missing packages
 4. Run dc_opt_dca.jl
 
+# Package Specification
+
 The code runs on the latest version of julia, JUMP, and Gurobi. 
+
+Gurobi offers free educational licence https://www.gurobi.com
