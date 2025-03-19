@@ -12,7 +12,7 @@ To run this code, follow the instruction
 
 # Repo Method
 4. Type `julia`, hit enter to enter julia environment
-5. Type "]" then type `activate .`, hit enter to active virtual environment
+5. Type `]` then type `activate .`, hit enter to active virtual environment
 6. Type `instantiate`, hit enter
 7. Click delete to go back to julia environment
 8. Type `include("dc_opt_dca.jl")` to run the file
