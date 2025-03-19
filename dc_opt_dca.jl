@@ -231,8 +231,8 @@ for i in 1:100000
 end
 
 
-@show f(λ̂,ỹ,ṽ);
-@show sum(sol_sos1[:λ̂_act]);
+println("dca total charge solution ", f(λ̂,ỹ,ṽ))
+println("ground truth total charge solution ", sum(sol_sos1[:λ̂_act]))
 plot(dca_charges)
 
 
