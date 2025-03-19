@@ -23,7 +23,8 @@ To run this code, follow the instruction
 10. Type `include("dc_opt_dca.jl")` to run the file
 
 # Repo Method
-4. Type `julia dc_opt_dca.jl`, hit enter
+10.Type `exit()'
+11. Type `julia dc_opt_dca.jl`, hit enter
 # Output
 You will obtain the plot named smallcase_convergence.png showing the convergence to groundtruth.
 
