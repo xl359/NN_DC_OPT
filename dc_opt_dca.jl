@@ -1,14 +1,20 @@
 using JLD2
 using JuMP, Gurobi
 using LinearAlgebra, Random
+#using Plots.PlotMeasures
+using Pkg
+Pkg.activate() 
 const GRB_ENV = Gurobi.Env()
 
+expand_factor = 1
+
+
+ρ_factor = 1.5
 include("find_rho.jl")
 ρ  = rho_value()
-ρ_factor = 1.5
-ρ = ρ*ρ_factor
-include("aux_fun.jl")
 
+ρ = ρ*ρ_factor*expand_factor
+include("aux_fun.jl")
 
 # load OPF data (traning set and network params)
 data = JLD2.load("train_data_paper.jld2", "train_data")
@@ -57,7 +63,6 @@ function nn_sos1_ref(d)
     return Dict(:λ̂ => JuMP.value.(λ̂), :y => JuMP.value.(y), :v => JuMP.value.(v))
 end
 
-
 # function to normalize and denormalize loads and charges
 # un_normalize load
 _d_(d) = d .*(data[:d_max]-data[:d_min]) .+ data[:d_min]
@@ -91,7 +96,7 @@ function opt_sos1()
             :obj: sum of the output of the nenral network
         =#
     model = Model(() -> Gurobi.Optimizer(GRB_ENV))
-
+    JuMP.set_silent(model)
     @variable(model, y[1:n_hn,1:n_hl]>=0)
     @variable(model, v[1:n_hn,1:n_hl]>=0)
     @variable(model, d̂[1:n_in])
@@ -114,7 +119,6 @@ function opt_sos1()
     optimize!(model)
     return Dict(:y => JuMP.value.(y), :v => JuMP.value.(v), :d̂_act => _d_(JuMP.value.(d̂)), :λ̂_act => _λ_(JuMP.value.(λ̂)), :d̂ => JuMP.value.(d̂), :λ̂ => JuMP.value.(λ̂), :obj => JuMP.objective_value(model))
 end
-
 
 function opt_dca_sub(ỹ,ṽ)
     #= 
@@ -162,7 +166,6 @@ end
 
 sol_sos1 = opt_sos1()
 
-
 # Helper functions 
 # penality function
 ϕ(y,v) = 1/4*norm(y+v,2)^2 - 1/4*norm(y-v,2)^2
@@ -206,6 +209,8 @@ d_init = d_init[:d]
 # take the third sample to be the initial d value 
 sample = 3
 sol_init = nn_sos1_ref(data[:d][:,sample])
+#sol_init = nn_sos1_ref(d_init)
+
 λ̂ =sol_init[:λ̂]
 ỹ = sol_init[:y]
 ṽ = sol_init[:v]
@@ -218,21 +223,17 @@ dca_charges = []
 sos1 = []
 iteration_number = 0
 for i in 1:100000
-    global λ̂,ỹ,ṽ,iteration_number
+    global λ̂,ỹ,ṽ,iteration_number,d̃,f_aft
     iteration_number = iteration_number + 1
     f_pre = f(λ̂,ỹ,ṽ)
     sol_dca_sub = opt_dca_sub(ỹ,ṽ)
     ỹ, ṽ, λ̂, d̃ = sol_dca_sub[:y], sol_dca_sub[:v], sol_dca_sub[:λ̂], sol_dca_sub[:d̂_act]
     f_aft = f(λ̂,ỹ,ṽ)
-    i % 1 == 0 ? println("i: $i ... f: $(f(λ̂,ỹ,ṽ)) ... comp_viol: $(com_cond(ỹ,ṽ)) ... Δf: $(norm(f_aft-f_pre))") : NaN
+    i % 500 == 0 ? println("i: $i ... f: $(f(λ̂,ỹ,ṽ)) ... comp_viol: $(com_cond(ỹ,ṽ)) ... Δf: $(norm(f_aft-f_pre))") : NaN
     norm(f_aft-f_pre) <= ϵ_tol ? break : NaN 
     append!(dca_charges,f_aft)
     append!(sos1,com_cond(ỹ,ṽ))
 end
-
-
-println("dca total charge solution ", f(λ̂,ỹ,ṽ))
-println("ground truth total charge solution ", sum(sol_sos1[:λ̂_act]))
 
 
 data_set = Dict(:ρ => ρ,
@@ -243,3 +244,28 @@ data_set = Dict(:ρ => ρ,
                   :iteration_number => iteration_number
                     )
 @save "dca_charges.jld2" data_set
+
+charge_1 = data_set[:dca_charges]./data_set[:ground_truth_charge_final]
+p1 = plot(charge_1,  label= "ρ⋆",color= "black" ,linestyle=:solid, lw = 3)
+
+plot!(ones(10000), label="ground truth",linestyle=:dash, color = :black)
+
+plot!(size=(600,250))
+plot!(xlabel="iteration", ylabel="normalized total charge",  # Common labels
+xaxis = :log,
+ylims=(0.999, 1.0015),
+xlim=(10, 10000),
+legend=:bottomleft)
+plot!(tickfontsize=10) 
+plot!(legendfontsize=8)
+plot!(ylabelfontsize=11)
+plot!(xlabelfontsize=11)
+
+#plot!(bottom_margin = 3mm)
+plot!(dpi=300)
+
+savefig(p1, "smallcase_convergence.png")
+
+
+
+
