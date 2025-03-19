@@ -12,7 +12,7 @@ To run this code, follow the instruction
 
 # Repo Method
 4. Type `julia`, hit enter to enter julia environment
-5. Type `]` then type `activate .`, hit enter to active virtual environment
+5. Type `]`
 6. Run this command
    ```
    activate .
