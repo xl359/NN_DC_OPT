@@ -3,6 +3,7 @@ Optimization over trained neural networks and application to data center schedul
 
 This repo produces the results for a small test case of dca solution application on data center allocation.
 
+Make sure to active project environment using `Project.toml` and `Manifest.toml` located in the folder.
 To run this code, follow the instruction
 
 1. Obtain the Gurobi licence
@@ -10,14 +11,14 @@ To run this code, follow the instruction
 3. Open Terminal and cd to the corresponding folder
 
 # Repo Method
-4. Type julia, hit enter to enter julia environment
-5. Type "]" then type "activate .", hit enter to active virtual environment
-6. Type "instantiate", hit enter
+4. Type `julia`, hit enter to enter julia environment
+5. Type "]" then type `activate .`, hit enter to active virtual environment
+6. Type `instantiate`, hit enter
 7. Click delete to go back to julia environment
-8. Type "include("dc_opt_dca.jl")" to run the file
+8. Type `include("dc_opt_dca.jl")` to run the file
 
 # Repo Method
-4. Type "julia dc_opt_dca.jl", hit enter
+4. Type `julia dc_opt_dca.jl`, hit enter
 
 
 # Package Specification
@@ -49,4 +50,6 @@ StatsPlots v0.15.7
 Turing v0.34.1
 Zygote v0.6.75
 
-Gurobi offers free educational licence https://www.gurobi.com
+
+Gurobi is used as the optimization software. Gurobi offers free educational licence [Gurobi](URL)https://www.gurobi.com
+JuMP is a modeling language. See [JuMP](URL)[https://www.gurobi.com](https://github.com/jump-dev/JuMP.jl)
