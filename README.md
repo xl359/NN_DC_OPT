@@ -1,19 +1,19 @@
 # NN_DC_OPT
 Optimization over trained neural networks and application to data center scheduling
 
-This repo produces the results for a small test case on PJM 5-bus system of dca solution application on data center allocation.
+This repo produces the results for a small test case on PJM 5-bus and larger test case on IEEE 118 system of dca solution application on data center allocation.
 
 Make sure to active project environment using `Project.toml` and `Manifest.toml` located in the folder.
 To run this code, follow the instruction
 
 1. Obtain the Gurobi licence
 2. Download everything to a folder
-3. Open Terminal and cd to the corresponding folder
+4. Open Terminal and cd to the corresponding folder, i.e. small_example or large_example
 
 # Repo Method
 4. Type `julia`, hit enter to enter julia environment
 5. Type `]`
-6. Run this command
+6. For small example, run this command
    ```
    activate .
    add JLD2 PowerModels Ipopt Distributions JuMP Gurobi LinearAlgebra Plots Random
