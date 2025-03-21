@@ -6,7 +6,7 @@ const GRB_ENV = Gurobi.Env()
 
 
 function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
-    #= 
+    """
 
     This function takes in the loading scale and the input output dimension of the neural network and 
         return the optimal rho value for DCA computation
@@ -19,7 +19,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
     Return: 
             rho value
 
-    =#
+    """
     # load OPF data (traning set and network params)
     data = JLD2.load("train_data_paper.jld2", "train_data")
     net = data[:net]
@@ -45,8 +45,8 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
     _d̂_upper = _d̂_(net[:d])
 
     function computing_matricies(n_hl, n_hn,nn, Δ, _d̂_lower, _d̂_upper)
-
-        #= this function inherent the neural network parameter computed above
+         """
+         this function inherent the neural network parameter computed above
             and return several matricies to present the formulation in the
             vectorized formulation
         Arg: 
@@ -59,7 +59,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
 
         Return: 
             param: a dictionary containing all the necessary matricies
-        =#
+         """
 
 
         W = float.(Matrix(I, n_hl*n_hn, n_hl*n_hn))
@@ -93,7 +93,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
     param = computing_matricies(n_hl, n_hn,nn, Δ, _d̂_lower, _d̂_upper)
 
     function feasible_d(_d̂_lower,_d̂_upper,Δ)
-        #= 
+        """
 
             This function computes a feasible load value such that it satisfies the 
             box constraint on the load and the summation of the load = Δ
@@ -106,7 +106,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
         Return: 
                 :d  : load of datacenter. We use it as the starting point of DCA computation. 
                 
-        =#
+        """
 
         model = Model(() -> Gurobi.Optimizer(GRB_ENV))
         JuMP.set_silent(model)
@@ -125,7 +125,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
 
     function nn_sos1_ref_rho(d)
 
-        #= 
+        """
 
         This function takes in a value of datacenter load and compute the solution of the original problem 
         without the datacenter load constraints. It is equavaliant to passing it through the neural network.
@@ -139,7 +139,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
             :λ̂  : Charge of the datacenter loads
             :y  : The hidden neuron values
             :v  : Result of the ReLU function properity
-        =#
+        """
         model = Model(() -> Gurobi.Optimizer(GRB_ENV))
         JuMP.set_silent(model)
         @variable(model, y[1:n_hn,1:n_hl]>=0)
@@ -171,7 +171,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
     # find the index set:
     function index_set(ỹ, ṽ)
 
-        #= 
+         """
         
         This function computes the index sets corresponding to the RxLP solution
         
@@ -180,7 +180,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
             ṽ: v coordinate of the feasble point computed using feasible_d
         Return: 
             Iy, Iv, I0 index sets for solving RxLP
-        =#
+         """
             
         Iy = []
         Iv = []
@@ -206,7 +206,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
 
     function solve_RxLP(param,Iy,Iv) 
 
-        #= 
+       """
 
             This function takes in the matricies and index sets and comput the solution to the relaxed problem 
             to retrieve the stronly stationary point 
@@ -221,7 +221,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
                 :v  : Result of the ReLU function properity
                 :obj: Sum of the final layer output 
                 
-        =#
+        """
         c = param["c"]
         A = param["A"]
         f = param["f"]
@@ -256,7 +256,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
 
     function multiplier_precondition(param,soln_RxLP)
 
-        #= 
+        """
 
             This function takes in the parameter of matricies and the solution of RxLP 
             Return the set to indicate which indicies should be zero. This function serve
@@ -272,7 +272,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
             Iμy: where μy is zero
             Iμv: where μv is zero
 
-        =#
+      """
         ȳ = soln_RxLP[:y]
         v̄ = soln_RxLP[:v]
         # primer for ws solutions:
@@ -311,7 +311,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
     Iλ,I0λ,Iμy,Iμv = multiplier_precondition(param,soln_RxLP)
 
     function solve_multipliers(param,Iλ,I0λ,Iμy,Iμv,Iv,Iy) 
-        #= 
+       """
         This function takes in the parameter and the precondition sets and compute the 
         lagraugian multiplier of the RxLP solution to retrieve rhobar value
 
@@ -323,7 +323,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
         Return:
             A dictionary that contains 
                 μy and μv for rho computation. 
-        =#
+       """
             
         c = param["c"]
         A = param["A"]
@@ -360,7 +360,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
 
     function compute_ρ(solved_multipliers)
 
-        #= 
+       """
 
         This function computes the \rho value from 
         the solution of the solution of 
@@ -371,7 +371,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
         
         Return: \rho
         
-        =#
+        """
 
         μy = solved_multipliers[:μy]
         μv = solved_multipliers[:μv]
