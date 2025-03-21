@@ -1,7 +1,4 @@
-using JLD2
-using JuMP, Gurobi
-using LinearAlgebra
-using Plots
+using JLD2,JuMP, Gurobi,LinearAlgebra,Plots
 const GRB_ENV = Gurobi.Env()
 
 
