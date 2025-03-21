@@ -7,8 +7,8 @@ Make sure to active project environment using `Project.toml` and `Manifest.toml`
 To run this code, follow the instruction
 
 1. Obtain the Gurobi licence
-2. Download everything to a folder
-4. Open Terminal and cd to the corresponding folder, i.e. small_example or large_example
+2. Download small_example or large_example folder
+4. Open Terminal and cd to the corresponding folder
 
 # Repo Method
 4. Type `julia`, hit enter to enter julia environment
