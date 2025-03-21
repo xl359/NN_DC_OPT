@@ -1,6 +1,4 @@
-using JLD2
-using JuMP, Gurobi
-using LinearAlgebra, Random
+using JLD2,JuMP, Gurobi,LinearAlgebra, Random
 using Pkg
 Pkg.activate() 
 const GRB_ENV = Gurobi.Env()
