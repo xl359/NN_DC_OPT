@@ -1,12 +1,5 @@
 
-using JLD2
-using JuMP, Gurobi,Random
-using LinearAlgebra
-using Plots,StatsBase
-using JLD2
-using LinearAlgebra
-using Statistics
-using Plots
+using JLD2,JuMP, Gurobi,Random, LinearAlgebra,Plots,StatsBase,LinearAlgebra,Statistics,Plots
 
 using Colors
 const GRB_ENV = Gurobi.Env()
