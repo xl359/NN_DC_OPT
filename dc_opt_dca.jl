@@ -1,14 +1,15 @@
 using JLD2
 using JuMP, Gurobi
 using LinearAlgebra, Random
-#using Plots.PlotMeasures
 using Pkg
 Pkg.activate() 
 const GRB_ENV = Gurobi.Env()
 
+# this fector is how much you want to expand the ρ value. 
+# it is defaulted to 1
 expand_factor = 1
 
-
+# this factor is used to fine tune the ρ⋆ value so that the complementarity condition is satisfied
 ρ_factor = 1.5
 include("find_rho.jl")
 ρ  = rho_value()
@@ -46,7 +47,6 @@ function nn_sos1_ref(d)
             :v  : Result of the ReLU function properity
         =#
     model = Model(() -> Gurobi.Optimizer(GRB_ENV))
-    JuMP.set_silent(model)
 
     @variable(model, y[1:n_hn,1:n_hl]>=0)
     @variable(model, v[1:n_hn,1:n_hl]>=0)
@@ -175,42 +175,11 @@ f(λ̂,y,v) = ones(n_out)'_λ_(λ̂) + ρ*sum(ϕ(y[:,i],v[:,i]) for i in 1:n_hl)
 # complementary condition violatioin computation
 com_cond(y,v) = sum(y[:,i]'v[:,i] for i in 1:n_hl)
 
-function feasible_d(_d̂_lower,_d̂_upper,Δ)
-    #= 
-
-        This function computes a feasible load value such that it satisfies the 
-        box constraint on the load and the summation of the load = Δ
-    
-    Arg: 
-            _d̂_lower: lower bound on load
-            _d̂_upper: upper bound on load
-            Δ       : sum of the load constraint
-
-    Return: 
-            :d  : load of datacenter. We use it as the starting point of DCA computation. 
-            
-    =#
-
-    model = Model(() -> Gurobi.Optimizer(GRB_ENV))
-    JuMP.set_silent(model)
-    # specifying variable
-    @variable(model,d[1:n_in])
-    # specifying constrains
-    @constraint(model, d .>=_d̂_lower)
-    @constraint(model, d .<=  _d̂_upper)
-    @constraint(model, dot(ones(1,length(d)),d) == Δ)
-    optimize!(model)
-    return Dict(:d => value.(d))
-end
-
-d_init = feasible_d(_d̂_lower,_d̂_upper,Δ)
-d_init = d_init[:d]
 
 # compute initial ỹ and ṽ
 # take the third sample to be the initial d value 
 sample = 3
 sol_init = nn_sos1_ref(data[:d][:,sample])
-#sol_init = nn_sos1_ref(d_init)
 
 λ̂ =sol_init[:λ̂]
 ỹ = sol_init[:y]
@@ -261,8 +230,6 @@ plot!(tickfontsize=10)
 plot!(legendfontsize=8)
 plot!(ylabelfontsize=11)
 plot!(xlabelfontsize=11)
-
-#plot!(bottom_margin = 3mm)
 plot!(dpi=300)
 
 savefig(p1, "smallcase_convergence.png")

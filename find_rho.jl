@@ -66,7 +66,7 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
         for i = 2:n_hl
             W[((i-1)*n_hn+1):i*n_hn, ((i-2)*n_hn+1):(i-1)*n_hn]=-nn[:W][i]
         end
-        # compute q
+        # compute b
         b = []
         for i = 1:n_hl
             b = [b;-nn[:b][i]]
@@ -188,7 +188,6 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
 
         for i = 1:length(ỹ)
         # global Iy,Iv,I0
-                
 
             if ỹ[i] == 0 && ṽ[i] > 0
                 Iy = [Iy;i]
@@ -233,7 +232,6 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
         ydim = length(b)
         vdim = length(b)
         model = Model(() -> Gurobi.Optimizer(GRB_ENV))
-        #set_optimizer_attribute(model, "FeasibilityTol", 1e-2)  # Relax feasibility tolerance
         JuMP.set_silent(model)
         @variable(model, d[1:ddim])
         @variable(model, y[1:ydim])
@@ -298,8 +296,6 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
         Iμv = []
         for i = 1:length(ȳ)
 
-        # global Iμy,Iμv
-
             if ȳ[i] != 0
                 Iμy = [Iμy;i]
             end
@@ -339,10 +335,6 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
         μvdim = size(V,1)
         model = Model(() -> Gurobi.Optimizer(GRB_ENV))
         JuMP.set_silent(model)
-        set_optimizer_attribute(model, "FeasibilityTol", 1e-6)
-        set_optimizer_attribute(model, "MIPGap", 0.01)          # Set MIP gap tolerance for mixed integer problems
-        set_optimizer_attribute(model, "TimeLimit", 300)         # Set time limit to 300 seconds
-        set_optimizer_attribute(model, "Threads", 4) 
         @variable(model, λ[1:λdim])
         @variable(model, μy[1:μydim])
         @variable(model, μv[1:μvdim])
@@ -389,7 +381,6 @@ function rho_value(dc_load_scale = 0.9, n_in = 3, n_out = 3)
         μy = μy[v̄ .> 0]
         minρset = [0;-μv./ybar;-μy./vbar]
         ρ = maximum(minρset)
-        #rhosort = -sort(-minρset)
         return ρ
     end
 
