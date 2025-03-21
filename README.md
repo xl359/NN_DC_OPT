@@ -19,12 +19,18 @@ To run this code, follow the instruction
    add JLD2 PowerModels Ipopt Distributions JuMP Gurobi LinearAlgebra Plots Random
    instantiate
      ```
-9. Click delete to go back to Julia environment
-10. Type `include("dc_opt_dca.jl")` to run the file
+   For large example, run this command
+   ```
+   activate .
+   add JLD2 PowerModels Ipopt Distributions JuMP Gurobi LinearAlgebra Plots Random StatsBase Statistics
+   instantiate
+     ```
+8. Click delete to go back to Julia environment
+9. Type `include("dc_opt_dca.jl")` to run the file
 
 # Repo Method
-10. Type `exit()' to exit Julia
-11. Type `julia dc_opt_dca.jl`, hit enter
+9. Type `exit()' to exit Julia
+10. Type `julia dc_opt_dca.jl`, hit enter
 # Output
 You will obtain the plot named smallcase_convergence.png showing the convergence to groundtruth.
 
