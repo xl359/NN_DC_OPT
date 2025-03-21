@@ -15,8 +15,8 @@ purple=RGB(122/256,30/256,71/256)
 blue=RGB(0/256, 39/256, 76/256)
 green=RGB(74/256, 103/256, 65/256)
 
-include("aux_fun_large.jl")
-include("find_rho_large.jl")
+include("aux_fun.jl")
+include("find_rho.jl")
 
 ρ  = rho_value()
 
