@@ -25,7 +25,7 @@ function rho_value()
     # this is the index where Δ is from
     sample_ind = sampled_numbers[sample_index]
 
-    include("aux_fun_large.jl")
+    include("aux_fun.jl")
 
     net = dataset[:net]
     # load neural network
