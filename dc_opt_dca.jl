@@ -31,8 +31,7 @@ dc_load_scale = 0.9
 
 
 function nn_sos1_ref(d)
-    #= 
-
+    """
         This function takes in a value of datacenter load and compute the solution of the original problem 
         without the datacenter load constraints. It is equavaliant to passing it through the neural network.
 
@@ -45,7 +44,7 @@ function nn_sos1_ref(d)
             :λ̂  : Charge of the datacenter loads
             :y  : The hidden neuron values
             :v  : Result of the ReLU function properity
-        =#
+        """
     model = Model(() -> Gurobi.Optimizer(GRB_ENV))
 
     @variable(model, y[1:n_hn,1:n_hl]>=0)
@@ -81,7 +80,7 @@ _d̂_upper = _d̂_(net[:d])
 
 
 function opt_sos1()
-    #= 
+    """
 
         This function computes the solution of the original problem 
         without the datacenter load constraints. It is equavaliant to passing it through the neural network.
@@ -95,7 +94,7 @@ function opt_sos1()
             :d̂ : normalized optimal load
             :λ̂ : normalized optimal charge
             :obj: sum of the output of the nenral network
-        =#
+        """
     model = Model(() -> Gurobi.Optimizer(GRB_ENV))
     JuMP.set_silent(model)
     @variable(model, y[1:n_hn,1:n_hl]>=0)
@@ -122,7 +121,7 @@ function opt_sos1()
 end
 
 function opt_dca_sub(ỹ,ṽ)
-    #= 
+    """
     This function takes in the initial value of the hidden neurons and the v vector, which 
     and returns the dca solution of each iteration_number
 
@@ -138,7 +137,7 @@ function opt_dca_sub(ỹ,ṽ)
         :d̂ : normalized optimal load
         :λ̂ : normalized optimal charge
         :obj: sum of the output of the nenral network
-    =#
+    """
         
     model = Model(() -> Gurobi.Optimizer(GRB_ENV))
     JuMP.set_silent(model)
